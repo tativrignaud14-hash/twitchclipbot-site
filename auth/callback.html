@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Twitch Auth Callback</title>
+</head>
+<body>
+  <script>
+    // Récupère le fragment d'URL après le # (Twitch renvoie l'access_token ici)
+    const hash = window.location.hash
+      .substring(1)
+      .split('&')
+      .reduce((acc, item) => {
+        const [key, value] = item.split('=');
+        acc[key] = value;
+        return acc;
+      }, {});
+
+    // Vérifie s'il y a un token
+    if (hash.access_token) {
+      // Stocke le token localement (à adapter selon ton flux)
+      localStorage.setItem('twitch_access_token', hash.access_token);
+
+      // Redirige vers ton app principale
+      window.location.href = `/success.html?token=${hash.access_token}`;
+    } else {
+      document.body.innerHTML = "<h3>Erreur : aucun token reçu.</h3>";
+    }
+  </script>
+</body>
+</html>
